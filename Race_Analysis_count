@@ -1,0 +1,23 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Read in the data
+df = pd.read_csv('/Users/michaelwirick/Desktop/CleanedData.csv')
+
+# Create a list of races to include in the chart
+races = ['White', 'Black or African American', 'Asian', 'Other', 'Unknown']
+
+# Filter the dataframe to include only the races in the list
+df_filtered = df[df['patient_race'].isin(races)]
+
+# Create a bar chart of race counts
+race_counts = df_filtered['patient_race'].value_counts()
+plt.bar(race_counts.index, race_counts.values)
+
+# Rotate the x-axis labels by 45 degrees
+plt.xticks(rotation=10.5)
+
+plt.title('Distribution of Patient Races')
+plt.xlabel('Race')
+plt.ylabel('Count')
+plt.show()

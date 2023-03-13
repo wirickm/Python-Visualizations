@@ -1,0 +1,26 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# read in CSV file
+df = pd.read_csv('/Users/michaelwirick/Desktop/CleanedData.csv')
+
+# convert lab_test_date column to datetime format
+df['lab_test_date'] = pd.to_datetime(df['lab_test_date'])
+
+# group data by month and count lab tests
+tests_by_month = df.groupby(pd.Grouper(key='lab_test_date', freq='M')).size()
+
+# visualize the temporal distribution using a line plot
+plt.figure(figsize=(10, 6))
+plt.plot(tests_by_month)
+plt.title('Temporal Distribution of COVID Lab Tests')
+plt.xlabel('Month')
+plt.ylabel('Lab Tests')
+plt.show()
+
+# compute the mean and median number of tests per month
+mean_tests_per_month = tests_by_month.mean()
+median_tests_per_month = tests_by_month.median()
+
+print('Mean tests per month:', mean_tests_per_month)
+print('Median tests per month:', median_tests_per_month)

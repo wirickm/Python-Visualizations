@@ -1,0 +1,13 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load data into a Pandas DataFrame
+df = pd.read_csv('/Users/michaelwirick/Desktop/CleanedData.csv')
+
+# Create a bar chart of lab_test_type counts
+test_counts = df['lab_test_type'].value_counts()
+plt.bar(test_counts.index, test_counts.values)
+plt.title('Distribution of Lab Test Types')
+plt.xlabel('Lab Test Type')
+plt.ylabel('Count')
+plt.show()

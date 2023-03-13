@@ -1,0 +1,15 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+df = pd.read_csv('/Users/michaelwirick/Desktop/CleanedData.csv')
+zipcode_counts = df['current_address_zip'].value_counts()
+
+# Remove zip codes with counts less than 5
+zipcode_counts = zipcode_counts[zipcode_counts >= 5]
+
+sns.barplot(x=zipcode_counts.index, y=zipcode_counts.values)
+plt.title('Distribution of Patient Zip Codes')
+plt.xlabel('Zip Code')
+plt.ylabel('Count')
+plt.show()

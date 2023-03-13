@@ -1,0 +1,21 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Read in the data and convert the patient_birth_date column to a datetime object
+df = pd.read_csv('/Users/michaelwirick/Desktop/CleanedData.csv')
+df['patient_birth_date'] = pd.to_datetime(df['patient_birth_date'])
+
+# Calculate age based on patient_birth_date and divide into 4 groups
+now = pd.Timestamp('now')
+df['age'] = (now - df['patient_birth_date']).astype('<m8[Y]')
+bins = [0, 20, 40, 60, 100]
+labels = ['0-20', '21-40', '41-60', '61-100']
+df['age_group'] = pd.cut(df['age'], bins=bins, labels=labels)
+
+# Create a bar chart of age groups
+age_counts = df['age_group'].value_counts()
+plt.bar(age_counts.index, age_counts.values)
+plt.title('Distribution of Patient Age Groups')
+plt.xlabel('Age Group')
+plt.ylabel('Count')
+plt.show()
