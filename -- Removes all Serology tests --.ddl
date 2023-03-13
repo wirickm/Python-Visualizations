@@ -27,4 +27,3 @@ WHERE patient_record_number IN (
 );
 
 SET SQL_SAFE_UPDATES = 1;
-
