@@ -1,0 +1,44 @@
+import pandas as pd
+import bar_chart_race as bcr
+
+# Read the OWID-COVID-Data CSV file
+owid_covid_data = pd.read_csv("/Users/michaelwirick/Downloads/owid-covid-data.csv")
+
+# Convert the date column to datetime format
+owid_covid_data['date'] = pd.to_datetime(owid_covid_data['date'])
+
+# Filter the data for the selected locations and for the date range 3/1/2020 to 3/1/2023
+selected_locations = ['United States', 'Brazil', 'India', 'Mexico', 'Peru', 'Russia', 'United Kingdom', 'Italy', 'Colombia', 'France', 'Iran', 'Indonesia', 'Germany']
+start_date = pd.to_datetime('2020-03-01')
+end_date = pd.to_datetime('2023-03-01')
+data_range = owid_covid_data[(owid_covid_data['location'].isin(selected_locations)) &
+                             (owid_covid_data['date'] >= start_date) &
+                             (owid_covid_data['date'] <= end_date)]
+
+# Group the data by location and month
+data_range_monthly = data_range.groupby(['location', pd.Grouper(key='date', freq='M')])['total_deaths'].last().reset_index()
+
+# Pivot the data to have the location names as columns
+data_range_pivot = data_range_monthly.pivot(index='date', columns='location', values='total_deaths')
+
+# Reset the index to have the date as a column
+data_range_pivot = data_range_pivot.reset_index()
+
+# Set the date column as the index
+data_range_pivot = data_range_pivot.set_index('date')
+
+# Create the bar chart race
+bcr.bar_chart_race(
+    df=data_range_pivot,
+    filename='total_deaths_2020_2023.mp4',
+    title='Total Deaths by Country from 2020 to 2023',
+    orientation='h',
+    sort='desc',
+    n_bars=10,
+    fixed_order=False,
+    label_bars=True,
+    bar_size=.95,
+    period_length=1000,
+    period_fmt="%Y-%m",
+    interpolate_period=False,
+)
